@@ -2,7 +2,7 @@ import request from '@/utils/request';
 import { jsonToFormData } from '@/utils/utils';
 
 export async function GetComplaint(params) {
-  return request('/api/v1/GetComplaint', {
+  return request('api/v1/Dictionary', {
     method: 'POST',
     // data: jsonToFormData(updateQueryParams(params)),
     data: jsonToFormData(params),

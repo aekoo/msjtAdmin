@@ -32,9 +32,9 @@ class DictList extends Component {
   };
 
   p = {
-    currentpage: 1,
+    currentPage: 1,
     pageSize: 10,
-  }
+  };
   columns = [
     {
       title: '举报ID',
@@ -194,17 +194,17 @@ class DictList extends Component {
       </Form>
     );
   }
-  
+
   // 切换页码
-  handleStandardTableChange = (pagination) => {
+  handleStandardTableChange = pagination => {
     const { formValues } = this.state;
     const { current, pageSize } = pagination;
     this.p = {
-      currentpage: parseInt(current),
+      currentPage: parseInt(current),
       pageSize: parseInt(pageSize),
-    }
+    };
     const params = {
-      currentpage: parseInt(current),
+      currentPage: parseInt(current),
       pageSize: parseInt(pageSize),
       ...formValues,
     };
@@ -213,7 +213,10 @@ class DictList extends Component {
   };
 
   render() {
-    const { deploy: { dictData }, loading, } = this.props;
+    const {
+      deploy: { dictData },
+      loading,
+    } = this.props;
     const { modalVisible, record } = this.state;
     const { list = [] } = dictData || {};
 
@@ -242,7 +245,7 @@ class DictList extends Component {
               pagination={{
                 showQuickJumper: true,
                 showSizeChanger: true,
-                current: (dictData && dictData.currentpage) || 1,
+                current: (dictData && dictData.currentPage) || 1,
                 pageSize: (dictData && dictData.pageSize) || 10,
                 total: (dictData && dictData.totalCount) || 0,
                 showTotal: t => <div>共{t}条</div>,

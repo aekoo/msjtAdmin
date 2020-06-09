@@ -37,15 +37,17 @@ const menuDataRender = menuList =>
 
 const defaultFooterDom = (
   <DefaultFooter
-    copyright="2019 交通违法举报"
-    links={[
-      // {
-      //   key: 'github',
-      //   title: <Icon type="github" />,
-      //   href: 'https://github.com/ant-design/ant-design-pro',
-      //   blankTarget: true,
-      // },
-    ]}
+    copyright={`${new Date().getFullYear()} 明水交通运输执法大队`}
+    links={
+      [
+        // {
+        //   key: 'github',
+        //   title: <Icon type="github" />,
+        //   href: 'https://github.com/ant-design/ant-design-pro',
+        //   blankTarget: true,
+        // },
+      ]
+    }
   />
 );
 
@@ -140,8 +142,8 @@ const BasicLayout = props => {
         return first ? (
           <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
         ) : (
-            <span>{route.breadcrumbName}</span>
-          );
+          <span>{route.breadcrumbName}</span>
+        );
       }}
       footerRender={footerRender}
       menuDataRender={menuDataRender}
