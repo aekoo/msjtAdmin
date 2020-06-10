@@ -1,6 +1,7 @@
 import { message } from 'antd';
 import {
-  GetComplaint,
+  getDict,
+  addDict,
   editDict,
   deleteDict,
 } from '@/services/deploy';
@@ -9,24 +10,33 @@ const DeployModel = {
   namespace: 'deploy',
   state: {
     dictType: '3',
-    dictData: {},
+    dictData: [],
   },
   effects: {
     // dict 字典
     *fetchDict({ payload }, { call, put, select }) {
       // const { dictType } = yield select(_ => _.deploy);
       // const response = yield call(GetComplaint, payload || { dictType });
-      const response = yield call(GetComplaint, payload);
+      const response = yield call(getDict, payload);
       // if (payload || dictType != 3) {
       yield put({ type: 'saveDictData', payload: response, });
       // } else {
       //   yield put({ type: 'saveDictSelData', payload: response, });
       // }
     },
+    *addDict({ payload }, { call, put }) {
+      const response = yield call(addDict, payload);
+      if (response.code !== 200) {
+        return message.error(response.msg);
+      }
+      yield put({
+        type: 'fetchDict',
+      });
+    },
     *editDict({ payload }, { call, put }) {
       const response = yield call(editDict, payload);
-      if (response.code !== 1) {
-        return message.error(response.desc);
+      if (response.code !== 200) {
+        return message.error(response.msg);
       }
       yield put({
         type: 'fetchDict',
@@ -34,8 +44,8 @@ const DeployModel = {
     },
     *deleteDict({ payload }, { call, put }) {
       const response = yield call(deleteDict, payload);
-      if (response.code !== 1) {
-        return message.error(response.desc);
+      if (response.code !== 200) {
+        return message.error(response.msg);
       }
       yield put({
         type: 'fetchDict',

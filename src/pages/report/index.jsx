@@ -95,8 +95,8 @@ class ReportLIst extends Component {
             ))}
           </div>
         ) : (
-          '-'
-        );
+            '-'
+          );
       },
     },
     {
@@ -162,6 +162,17 @@ class ReportLIst extends Component {
     this.setState({
       modalVisible: !!flag,
       peview: record || '',
+    });
+  };
+  // 导出
+  handleDownload = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'report/exportData',
+      // payload: params,
+      callback: response => {
+        message.success('导出成功')
+      },
     });
   };
 
@@ -257,6 +268,7 @@ class ReportLIst extends Component {
                 total: (listData && listData.totalCount) || 0,
                 showTotal: t => <div>共{t}条</div>,
               }}
+              footer={() => <Button type="primary" onClick={this.handleDownload} >导出数据</Button>}
             />
           </div>
         </Card>

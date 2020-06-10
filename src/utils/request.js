@@ -4,6 +4,9 @@
  */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
+import { routerRedux } from 'dva/router';
+import { stringify } from 'querystring';
+
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -29,6 +32,14 @@ const errorHandler = error => {
   const { response } = error;
 
   if (response && response.status) {
+    if (response.status == 401) {
+      routerRedux.replace({
+        pathname: '/user/login',
+        search: stringify({
+          redirect: window.location.href,
+        }),
+      })
+    }
     const errorText = codeMessage[response.status] || response.statusText;
     const { status, url } = response;
     notification.error({
