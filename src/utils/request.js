@@ -4,8 +4,6 @@
  */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
-import { routerRedux } from 'dva/router';
-import { stringify } from 'querystring';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -33,12 +31,9 @@ const errorHandler = error => {
 
   if (response && response.status) {
     if (response.status == 401) {
-      routerRedux.replace({
-        pathname: '/user/login',
-        search: stringify({
-          redirect: window.location.href,
-        }),
-      })
+      window.g_app._store.dispatch({
+        type: 'login/logout',
+      });
     }
     const errorText = codeMessage[response.status] || response.statusText;
     const { status, url } = response;
