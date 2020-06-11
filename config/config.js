@@ -191,13 +191,6 @@ export default {
   },
   chainWebpack: webpackPlugin,
   proxy: {
-    '/admin/': {
-      target: 'http://47.93.209.206:8001/',
-      changeOrigin: true,
-      pathRewrite: {
-        '^/admin': '',
-      },
-    },
     '/api/': {
       target: 'http://47.93.209.206:8001/',
       changeOrigin: true,
