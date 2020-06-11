@@ -3,7 +3,7 @@ import { jsonToFormData } from '@/utils/utils';
 
 // dict 字典
 export async function getDict(params) {
-  return request('admin/GetDictionary', { params });
+  return request('api/GetDictionary', { params });
 }
 // 添加
 export async function addDict(params) {
