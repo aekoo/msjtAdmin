@@ -21,12 +21,12 @@ const OrderModel = {
 
     *exportData({ payload, callback }, { call, put }) {
       const response = yield call(exportData, payload);
-      if (response.code !== 200) {
-        return message.error(response.msg);
-      }
-      if (callback && typeof callback === 'function') {
-        callback(response);
-      }
+      // if (response.code !== 200) {
+      //   return message.error(response.msg);
+      // }
+      // if (callback && typeof callback === 'function') {
+      //   callback(response);
+      // }
     },
   },
   reducers: {

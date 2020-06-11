@@ -1,19 +1,4 @@
-import {
-  Badge,
-  Button,
-  Card,
-  Col,
-  DatePicker,
-  Form,
-  Input,
-  Icon,
-  Table,
-  Row,
-  Rate,
-  Select,
-  Modal,
-  message,
-} from 'antd';
+import { Badge, Button, Card, Col, DatePicker, Form, Input, Icon, Table, Row, Rate, Select, Modal, message, } from 'antd';
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
@@ -134,9 +119,7 @@ class ReportLIst extends Component {
   };
   // 查询
   handleSearch = e => {
-    if (e) {
-      e.preventDefault();
-    }
+    if (e) { e.preventDefault(); }
     const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -144,8 +127,8 @@ class ReportLIst extends Component {
       this.setState({ formValues: fieldsValue });
       let params = {
         ...fieldsValue,
-        StartComDate: rangeValue[0].format('YYYY-MM-DD'),
-        EndComDate: rangeValue[1].format('YYYY-MM-DD'),
+        StartComDate: rangeValue ? rangeValue[0].format('YYYY-MM-DD') : '',
+        EndComDate: rangeValue ? rangeValue[1].format('YYYY-MM-DD') : '',
       };
       this.fetchListData(params);
     });
@@ -166,13 +149,22 @@ class ReportLIst extends Component {
   };
   // 导出
   handleDownload = () => {
-    const { dispatch } = this.props;
+    const { form, dispatch } = this.props;
+    const { formValues } = this.state;
+
+    const rangeValue = formValues['searchDate'];
+    let params = {
+      ...formValues,
+      StartComDate: rangeValue ? rangeValue[0].format('YYYY-MM-DD') : '',
+      EndComDate: rangeValue ? rangeValue[1].format('YYYY-MM-DD') : '',
+    };
+
     dispatch({
       type: 'report/exportData',
-      // payload: params,
-      callback: response => {
-        message.success('导出成功')
-      },
+      payload: params,
+      // callback: response => {
+      //   message.success('导出成功')
+      // },
     });
   };
 

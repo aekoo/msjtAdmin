@@ -1,4 +1,4 @@
-import { Row, Col, Button, Card, Divider, Form, Table, Icon, Input, Select, Popconfirm, message, } from 'antd';
+import { Row, Col, Button, Badge, Card, Divider, Form, Table, Icon, Input, Select, Popconfirm, message, } from 'antd';
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
@@ -34,6 +34,7 @@ class DictList extends Component {
     {
       title: '状态',
       dataIndex: 'valid_flag',
+      render: (text, record) => <Badge status={text == 1 ? 'success' : 'error'} text={text == 1 ? '启用' : '禁用'} />
     },
     {
       title: '操作',
