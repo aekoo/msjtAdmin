@@ -158,13 +158,27 @@ class ReportLIst extends Component {
       StartComDate: rangeValue ? rangeValue[0].format('YYYY-MM-DD') : '',
       EndComDate: rangeValue ? rangeValue[1].format('YYYY-MM-DD') : '',
     };
-
+    var now = moment().locale('zh-cn').format('YYYY-MM-DD');
+    const fileName = now + '.xlsx';
     dispatch({
       type: 'report/exportData',
       payload: params,
-      // callback: response => {
-      //   message.success('导出成功')
-      // },
+      callback: blob => {
+        if (window.navigator.msSaveOrOpenBlob) {
+          navigator.msSaveBlob(blob, fileName);
+        } else {
+          const link = document.createElement('a');
+          const evt = document.createEvent('MouseEvents');
+          link.style.display = 'none';
+          link.href = window.URL.createObjectURL(blob);
+          link.download = fileName;
+          document.body.appendChild(link); // 此写法兼容可火狐浏览器
+          evt.initEvent('click', false, false);
+          link.dispatchEvent(evt);
+          document.body.removeChild(link);
+        }
+        message.success('导出成功')
+      },
     });
   };
 

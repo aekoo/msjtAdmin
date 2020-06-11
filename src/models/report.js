@@ -21,12 +21,13 @@ const OrderModel = {
 
     *exportData({ payload, callback }, { call, put }) {
       const response = yield call(exportData, payload);
-      // if (response.code !== 200) {
-      //   return message.error(response.msg);
-      // }
-      // if (callback && typeof callback === 'function') {
-      //   callback(response);
-      // }
+      if (response instanceof Blob) {
+        if (callback && typeof callback === 'function') {
+          callback(response);
+        }
+      } else {
+        message.warning('导出数据出错');
+      }
     },
   },
   reducers: {
