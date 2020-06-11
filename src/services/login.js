@@ -9,7 +9,7 @@ import { jsonToFormData } from '@/utils/utils';
 // }
 
 export async function fakeAccountLogin(params) {
-  return request('/admin/login', {
+  return request('/api/login', {
     method: 'POST',
     data: jsonToFormData(params),
   });
