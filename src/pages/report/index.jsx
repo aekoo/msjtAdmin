@@ -269,7 +269,7 @@ class ReportLIst extends Component {
 							pagination={{
 								// showQuickJumper: true,
 								// showSizeChanger: true,
-								current: (listData && listData.currentpage) || 1,
+								current: (listData && listData.currentPage) || 1,
 								pageSize: (listData && listData.pageSize) || 10,
 								total: (listData && listData.totalCount) || 0,
 								showTotal: t => <div>共{t}条</div>,
