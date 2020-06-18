@@ -8,6 +8,24 @@ export async function GetComplaint(params) {
   });
 }
 
+export async function GetComplaintByID(params) {
+  return request('/api/GetComplaintByID', {
+    method: 'POST',
+    data: jsonToFormData(params),
+  });
+}
+
+export async function GetDictionaryStatus(params) {
+  return request('/api/GetDictionaryStatus', { params });
+}
+
+export async function EditComplaint(params) {
+  return request('/api/EditComplaint', {
+    method: 'POST',
+    data: jsonToFormData(params),
+  });
+}
+
 export async function exportData(params) {
   return request('/api/download', {
     method: 'GET', // GET / POST 均可以

@@ -1,12 +1,15 @@
-import { Button, Card, Col, DatePicker, Form, Input, Table, Row, Modal, message, } from 'antd';
+import { Button, Card, Col, Divider, DatePicker, Form, Input, Icon, Popover, Popconfirm, Table, Select, Row, Modal, message, } from 'antd';
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import moment from 'moment';
+import InfoDetils from './components/infoDetils';
 import styles from './style.less';
 
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
+const { Option } = Select;
+const { TextArea } = Input;
 const dateFormat = 'YYYY/MM/DD';
 
 /* eslint react/no-multi-comp:0 */
@@ -19,6 +22,8 @@ class ReportLIst extends Component {
 		modalVisible: false,
 		formValues: {},
 		peview: '',
+		editRemarkComId: '',
+		remark: ''
 	};
 
 	p = {
@@ -41,6 +46,7 @@ class ReportLIst extends Component {
 			title: '举报内容',
 			dataIndex: 'com_content',
 			width: 300,
+			render: text => <p style={{ "overflow": 'hidden', "textOverflow": "ellipsis", "whiteSpace": "nowrap" }}>{text}</p>
 		},
 		{
 			title: '举报时间',
@@ -84,36 +90,50 @@ class ReportLIst extends Component {
 			},
 		},
 		{
+			title: '备注',
+			dataIndex: 'remark',
+			width: 200,
+			render: text => <p style={{ "overflow": 'hidden', "textOverflow": "ellipsis", "whiteSpace": "nowrap" }}>{text}</p>
+		},
+		{
 			title: '操作',
 			dataIndex: 'action',
-			width: 200,
-			align: 'center',
-			// render: (text, record) =>
-			//   record.dictId != 3 ? (
-			//     <span>
-			//       <a onClick={() => this.handleModalVisible(true, record)}>编辑</a>
-			//       <Divider type="vertical" />
-			//       <Popconfirm
-			//         title="确定要删除？"
-			//         okType="danger"
-			//         onConfirm={() => this.deleteFunc(record)}
-			//         icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
-			//       >
-			//         <a>删除</a>
-			//       </Popconfirm>
-			//     </span>
-			//   ) : null,
+			width: 300,
+			render: (text, record) =>
+				record.data_contents != "已归档" ? (
+					<span>
+						<Button type="primary" onClick={() => this.handleModalVisible(true, record)}>查看</Button>
+						<Divider type="vertical" />
+						{this.renderRemark(record)}
+						<Divider type="vertical" />
+						<Popconfirm
+							title="确定要删除？"
+							okType="danger"
+							onConfirm={() => this.editComplaint(record.com_id, 5)}
+							icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
+						>
+							<Button type="danger" ghost>归档</Button>
+						</Popconfirm>
+					</span>
+				) : <Button type="primary" onClick={() => this.handleModalVisible(true, record)}>查看</Button>,
 		},
 	];
 
 	componentDidMount() {
 		this.fetchListData();
+		this.fetchAllStatus();
 	}
 	fetchListData = params => {
 		const { dispatch } = this.props;
 		dispatch({
 			type: 'report/fetch',
 			payload: params,
+		});
+	};
+	fetchAllStatus = () => {
+		const { dispatch } = this.props;
+		dispatch({
+			type: 'report/fetchAllStatus',
 		});
 	};
 	// 查询
@@ -147,6 +167,65 @@ class ReportLIst extends Component {
 			peview: record || '',
 		});
 	};
+
+	// 处理&归档
+	editComplaint = (com_id, com_status) => {
+		const { dispatch } = this.props;
+		const { remark } = this.state;
+		let params = {
+			com_id,
+			com_status
+		}
+		if (com_status == 4) {
+			params.remark = remark
+		}
+		dispatch({
+			type: 'report/editComplaint',
+			payload: params,
+		});
+		this.setState({ editRemarkComId: '', remark: '' });
+	}
+
+	renderRemark(record) {
+		const { editRemarkComId } = this.state;
+		const { com_id, remark } = record;
+		return (
+			<Popover
+				title="备注信息"
+				trigger="click"
+				placement="topRight"
+				visible={editRemarkComId == com_id}
+				content={
+					<Form layout="inline">
+						<Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+							<Col md={8} sm={24}>
+								<FormItem>
+									<TextArea
+										rows={3}
+										placeholder="请输入备注信息"
+										defaultValue={remark}
+										onChange={e => this.setState({ remark: e.target.value })}
+										style={{ width: 260 }}
+									/>
+								</FormItem>
+							</Col>
+						</Row>
+						<Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+							<Col md={6} sm={24}>
+								<Button type="primary" onClick={() => this.editComplaint(com_id, 4)}>提交</Button>
+							</Col>
+							<Col md={6} sm={24}>
+								<Button onClick={() => this.setState({ editRemarkComId: '' })}>取消</Button>
+							</Col>
+						</Row>
+					</Form>
+				}
+			>
+				<Button type="primary" ghost onClick={() => this.setState({ editRemarkComId: com_id, remark })}>处理</Button>
+			</Popover>
+		)
+	}
+
 	// 导出
 	handleDownload = () => {
 		const { dispatch } = this.props;
@@ -184,6 +263,7 @@ class ReportLIst extends Component {
 
 	renderForm() {
 		const {
+			report: { statusData = [] },
 			form: { getFieldDecorator },
 		} = this.props;
 		return (
@@ -211,6 +291,23 @@ class ReportLIst extends Component {
 					<Col md={6} sm={24}>
 						<FormItem label="身份证号码">
 							{getFieldDecorator('cardId', { initialValue: '' })(<Input placeholder="请输入" />)}
+						</FormItem>
+					</Col>
+				</Row>
+				<Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+					<Col md={6} sm={24}>
+						<FormItem label="状态">
+							{getFieldDecorator('status', { initialValue: '' })(
+								<Select placeholder="请选择" style={{ width: '100%' }}>
+									<Option key="0" value="">全部</Option>
+									{statusData.map(item => <Option key={item.data_id} value={item.data_id}>{item.data_content}</Option>)}
+								</Select>,
+							)}
+						</FormItem>
+					</Col>
+					<Col md={6} sm={24}>
+						<FormItem label="举报类容">
+							{getFieldDecorator('com_content', { initialValue: '' })(<Input placeholder="请输入" />)}
 						</FormItem>
 					</Col>
 				</Row>
