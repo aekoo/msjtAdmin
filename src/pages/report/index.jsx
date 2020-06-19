@@ -110,8 +110,8 @@ class ReportLIst extends Component {
             ))}
           </div>
         ) : (
-          '-'
-        );
+            '-'
+          );
       },
     },
     {
@@ -125,7 +125,8 @@ class ReportLIst extends Component {
     {
       title: '操作',
       dataIndex: 'action',
-      width: 300,
+      width: 200,
+      fixed: 'right',
       render: (text, record) =>
         record.data_contents != '已归档' ? (
           <span>
@@ -151,14 +152,14 @@ class ReportLIst extends Component {
             </Popconfirm>
           </span>
         ) : (
-          <Button
-            type="primary"
-            size="small"
-            onClick={() => this.handleInfoModal(true, record.com_id)}
-          >
-            查看
-          </Button>
-        ),
+            <Button
+              type="primary"
+              size="small"
+              onClick={() => this.handleInfoModal(true, record.com_id)}
+            >
+              查看
+            </Button>
+          ),
     },
   ];
 
