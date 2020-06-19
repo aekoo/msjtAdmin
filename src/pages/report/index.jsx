@@ -89,6 +89,11 @@ class ReportLIst extends Component {
       width: 200,
     },
     {
+      title: '状态',
+      dataIndex: 'data_contents',
+      width: 100,
+    },
+    {
       title: '补充图片',
       dataIndex: 'com_pic',
       width: 100,
