@@ -128,44 +128,44 @@ class ReportLIst extends Component {
       width: 200,
       fixed: 'right',
       render: (text, record) =>
-        record.data_contents != '已归档' ? (
-          <span>
-            <Button
-              type="primary"
-              size="small"
-              onClick={() => this.handleInfoModal(true, record.com_id)}
-            >
-              查看
+        <span>
+          <Button
+            type="primary"
+            size="small"
+            onClick={() => this.handleInfoModal(true, record.com_id)}
+          >
+            查看
             </Button>
-            <Divider type="vertical" />
-            <Button
-              type="primary"
-              size="small"
-              onClick={() => this.handleInfoModal(true, record.com_id, true)}
-            >
-              处理
-            </Button>
-            <Divider type="vertical" />
-            <Popconfirm
-              title="确定要删除？"
-              okType="danger"
-              onConfirm={() => this.editComplaint(record.com_id, 5)}
-              icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
-            >
-              <Button type="danger" ghost size="small">
-                归档
+          {
+            record.data_contents != '已归档' ? (
+              <>
+                <Divider type="vertical" />
+                <Button
+                  type="primary"
+                  size="small"
+                  onClick={() => this.handleInfoModal(true, record.com_id, true)}
+                >处理</Button>
+              </>
+            ) : null
+          }
+          {
+            record.data_contents != '已归档' && record.data_contents != '新建' ? (
+              <>
+                <Divider type="vertical" />
+                <Popconfirm
+                  title="确定要删除？"
+                  okType="danger"
+                  onConfirm={() => this.editComplaint(record.com_id, 5)}
+                  icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
+                >
+                  <Button type="danger" ghost size="small">
+                    归档
               </Button>
-            </Popconfirm>
-          </span>
-        ) : (
-            <Button
-              type="primary"
-              size="small"
-              onClick={() => this.handleInfoModal(true, record.com_id)}
-            >
-              查看
-            </Button>
-          ),
+                </Popconfirm>
+              </>
+            ) : null
+          }
+        </span>
     },
   ];
 

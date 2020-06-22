@@ -33,9 +33,10 @@ class UpdatePwd extends Component {
     const { dispatch, form } = this.props;
     form.validateFields((err, values) => {
       if (!err) {
+        const { origainal_pass, password } = values
         dispatch({
           type: 'account/editPassword',
-          payload: { password: values.password },
+          payload: { origainal_pass, password },
           callback: res => {
             message.success('密码修改成功，请重新登录');
             setTimeout(() => {
@@ -57,7 +58,7 @@ class UpdatePwd extends Component {
         <Card bordered={false}>
           <Form {...layout}>
             <Form.Item label="旧密码">
-              {getFieldDecorator('old_password', {
+              {getFieldDecorator('origainal_pass', {
                 rules: [
                   {
                     required: true,
