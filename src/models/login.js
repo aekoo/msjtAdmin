@@ -19,8 +19,8 @@ const Model = {
 
       if (response.msg === 'ok') {
         const { UserInfo, token } = response.data;
-        localStorage.setItem('userName', UserInfo.user_name);
-        localStorage.setItem('token', token);
+        sessionStorage.setItem('userName', UserInfo.user_name);
+        sessionStorage.setItem('token', token);
 
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
@@ -54,14 +54,19 @@ const Model = {
 
       if (window.location.pathname !== '/user/login' && !redirect) {
         localStorage.clear();
-        yield put(
-          routerRedux.replace({
-            pathname: '/user/login',
-            search: stringify({
-              redirect: window.location.href,
+        const loc = window.location.href;
+        if (loc.indexOf('updatePwd') == -1) {
+          yield put(
+            routerRedux.replace({
+              pathname: '/user/login',
+              search: stringify({
+                redirect: loc,
+              }),
             }),
-          }),
-        );
+          );
+        } else {
+          yield put(routerRedux.replace({ pathname: '/user/login' }));
+        }
       }
     },
   },

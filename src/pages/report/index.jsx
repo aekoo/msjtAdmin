@@ -50,7 +50,7 @@ class ReportLIst extends Component {
 
   columns = [
     {
-      title: '举报ID',
+      title: '序号',
       dataIndex: 'com_id',
       width: 100,
       fixed: 'left',
@@ -110,8 +110,8 @@ class ReportLIst extends Component {
             ))}
           </div>
         ) : (
-            '-'
-          );
+          '-'
+        );
       },
     },
     {
@@ -127,7 +127,7 @@ class ReportLIst extends Component {
       dataIndex: 'action',
       width: 200,
       fixed: 'right',
-      render: (text, record) =>
+      render: (text, record) => (
         <span>
           <Button
             type="primary"
@@ -135,37 +135,36 @@ class ReportLIst extends Component {
             onClick={() => this.handleInfoModal(true, record.com_id)}
           >
             查看
-            </Button>
-          {
-            record.data_contents != '已归档' ? (
-              <>
-                <Divider type="vertical" />
-                <Button
-                  type="primary"
-                  size="small"
-                  onClick={() => this.handleInfoModal(true, record.com_id, true)}
-                >处理</Button>
-              </>
-            ) : null
-          }
-          {
-            record.data_contents != '已归档' && record.data_contents != '新建' ? (
-              <>
-                <Divider type="vertical" />
-                <Popconfirm
-                  title="确定要删除？"
-                  okType="danger"
-                  onConfirm={() => this.editComplaint(record.com_id, 5)}
-                  icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
-                >
-                  <Button type="danger" ghost size="small">
-                    归档
+          </Button>
+          {record.data_contents != '已归档' ? (
+            <>
+              <Divider type="vertical" />
+              <Button
+                type="primary"
+                size="small"
+                onClick={() => this.handleInfoModal(true, record.com_id, true)}
+              >
+                处理
               </Button>
-                </Popconfirm>
-              </>
-            ) : null
-          }
+            </>
+          ) : null}
+          {record.data_contents != '已归档' && record.data_contents != '新建' ? (
+            <>
+              <Divider type="vertical" />
+              <Popconfirm
+                title="确定要归档吗？"
+                okType="danger"
+                onConfirm={() => this.editComplaint(record.com_id, 5)}
+                icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
+              >
+                <Button type="danger" ghost size="small">
+                  归档
+                </Button>
+              </Popconfirm>
+            </>
+          ) : null}
         </span>
+      ),
     },
   ];
 
@@ -223,7 +222,7 @@ class ReportLIst extends Component {
     this.setState({
       infoModalVisible: !!flag,
       findID,
-      isDispose: !!isDispose
+      isDispose: !!isDispose,
     });
   };
 
@@ -374,7 +373,7 @@ class ReportLIst extends Component {
       handleInfoModal: this.handleInfoModal,
       handleInfoModalOk: this.editComplaint,
       findID,
-      isDispose
+      isDispose,
     };
 
     return (

@@ -60,11 +60,12 @@ const request = extend({
   credentials: 'include', // 默认请求是否带上cookie
 });
 
-request.interceptors.request.use(async (url, options) => {  // 此处为拦截器，每次发送请求之前判断能否取到token
-  const token = localStorage.getItem('token') || '';
+request.interceptors.request.use(async (url, options) => {
+  // 此处为拦截器，每次发送请求之前判断能否取到token
+  const token = sessionStorage.getItem('token') || '';
   if (token) {
     const headers = {
-      'token': token,
+      token: token,
     };
     return {
       url,

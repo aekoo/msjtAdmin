@@ -28,9 +28,9 @@ class AvatarDropdown extends React.Component {
   };
 
   render() {
-    const { menu, } = this.props;
-    const isLogin = localStorage.getItem('token');
-    const userName = localStorage.getItem('userName') || '未知用户';
+    const { menu } = this.props;
+    const isLogin = sessionStorage.getItem('token');
+    const userName = sessionStorage.getItem('userName') || '未知用户';
 
     const menuHeaderDropdown = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>
@@ -66,14 +66,14 @@ class AvatarDropdown extends React.Component {
         </span>
       </HeaderDropdown>
     ) : (
-        <Spin
-          size="small"
-          style={{
-            marginLeft: 8,
-            marginRight: 8,
-          }}
-        />
-      );
+      <Spin
+        size="small"
+        style={{
+          marginLeft: 8,
+          marginRight: 8,
+        }}
+      />
+    );
   }
 }
 
