@@ -1,8 +1,9 @@
-import { Row, Col, Form, Modal, Descriptions, message } from 'antd';
+import { Row, Col, Form, Button, Modal, Descriptions, Input, message } from 'antd';
 import React, { Component } from 'react';
 import { connect } from 'dva';
 
-const sexType = ['未知', '男', '女'];
+const FormItem = Form.Item;
+const { TextArea } = Input;
 
 @connect(({ report }) => ({
   report,
@@ -23,9 +24,21 @@ class UserInfo extends Component {
       payload: { com_id: findID },
     });
   };
+  // 确定
+  okHandle = () => {
+    const { form, findID, handleInfoModalOk } = this.props;
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      form.resetFields();
+      const remark = fieldsValue['remark'];
+      handleInfoModalOk(findID, 4, remark);
+    });
+  };
   render() {
     const {
+      form,
       handleInfoModal,
+      isDispose,
       report: { rowData = [] },
     } = this.props;
     const {
@@ -47,10 +60,18 @@ class UserInfo extends Component {
       <Modal
         width={720}
         destroyOnClose
+        maskClosable={false}
         visible={true}
-        footer={false}
-        onOk={() => handleInfoModal()}
+        onOk={() => okHandle()}
         onCancel={() => handleInfoModal()}
+        footer={isDispose ? [
+          <Button key="back" onClick={() => handleInfoModal()}>
+            取消
+          </Button>,
+          <Button key="submit" type="primary" onClick={() => this.okHandle()}>
+            确定
+          </Button>,
+        ] : null}
       >
         <Descriptions title="举报信息" layout="vertical" size="small" bordered>
           <Descriptions.Item label="ID">{com_id}</Descriptions.Item>
@@ -60,8 +81,8 @@ class UserInfo extends Component {
             {com_content}
           </Descriptions.Item>
           <Descriptions.Item label="补充图片" span={3}>
-            {images.map(item => (
-              <img style={{ width: 600, marginBottom: 10 }} src={item} />
+            {images.map((item, i) => (
+              <img key={i} style={{ width: 600, marginBottom: 10 }} src={item} />
             ))}
           </Descriptions.Item>
         </Descriptions>
@@ -71,14 +92,40 @@ class UserInfo extends Component {
           <Descriptions.Item label="联系电话" span={2}>
             {com_tel}
           </Descriptions.Item>
-          <Descriptions.Item label="身份证号码" span={2}>
+          <Descriptions.Item label="身份证号码" span={3}>
             {com_cardid}
           </Descriptions.Item>
         </Descriptions>
         <br />
-        <Descriptions size="small">
-          <Descriptions.Item label="备注">{remark}</Descriptions.Item>
-        </Descriptions>
+        {
+          isDispose ?
+            <Descriptions title="备注" size="small">
+              <Descriptions.Item>
+                <Form layout="inline">
+                  <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+                    <Col md={8} sm={24}>
+                      <FormItem>
+                        {form.getFieldDecorator('remark', {
+                          initialValue: remark,
+                          rules: [{ required: true, message: '请输入处理建议或备注信息！' }],
+                        })(<TextArea
+                          rows={5}
+                          placeholder="请输入处理建议或备注信息"
+                          style={{ width: 660 }}
+                        />)}
+                      </FormItem>
+                    </Col>
+                  </Row>
+                </Form>
+              </Descriptions.Item>
+            </Descriptions>
+            :
+            <Descriptions size="small">
+              <Descriptions.Item label="备注">
+                {remark}
+              </Descriptions.Item>
+            </Descriptions>
+        }
       </Modal>
     );
   }

@@ -37,7 +37,7 @@ const menuDataRender = menuList =>
 
 const defaultFooterDom = (
   <DefaultFooter
-    copyright={`${new Date().getFullYear()} 明水交通运输执法大队`}
+    copyright={`${new Date().getFullYear()} 明水县交通运输综合行政执法大队`}
     links={
       [
         // {

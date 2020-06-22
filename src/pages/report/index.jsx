@@ -37,10 +37,9 @@ class ReportLIst extends Component {
   state = {
     modalVisible: false,
     infoModalVisible: false,
+    isDispose: false,
     formValues: {},
     peview: '',
-    editRemarkComId: '',
-    remark: '',
     findID: '',
   };
 
@@ -53,7 +52,8 @@ class ReportLIst extends Component {
     {
       title: '举报ID',
       dataIndex: 'com_id',
-      width: 120,
+      width: 100,
+      fixed: 'left',
     },
     {
       title: '车牌号码',
@@ -138,7 +138,13 @@ class ReportLIst extends Component {
               查看
             </Button>
             <Divider type="vertical" />
-            {this.renderRemark(record)}
+            <Button
+              type="primary"
+              size="small"
+              onClick={() => this.handleInfoModal(true, record.com_id, true)}
+            >
+              处理
+            </Button>
             <Divider type="vertical" />
             <Popconfirm
               title="确定要删除？"
@@ -213,81 +219,23 @@ class ReportLIst extends Component {
       peview: images || '',
     });
   };
-  handleInfoModal = (flag, findID) => {
+  handleInfoModal = (flag, findID, isDispose) => {
     this.setState({
       infoModalVisible: !!flag,
       findID,
+      isDispose: !!isDispose
     });
   };
 
   // 处理&归档
-  editComplaint = (com_id, com_status) => {
+  editComplaint = (com_id, com_status, remark) => {
     const { dispatch } = this.props;
-    const { remark } = this.state;
-    let params = {
-      com_id,
-      com_status,
-    };
-    if (com_status == 4) {
-      params.remark = remark;
-    }
     dispatch({
       type: 'report/editComplaint',
-      payload: params,
+      payload: { com_id, com_status, remark },
     });
-    this.setState({ editRemarkComId: '', remark: '' });
+    this.handleInfoModal();
   };
-
-  renderRemark(record) {
-    const { editRemarkComId } = this.state;
-    const { com_id, remark } = record;
-    return (
-      <Popover
-        title="备注信息"
-        trigger="click"
-        placement="topRight"
-        visible={editRemarkComId == com_id}
-        content={
-          <Form layout="inline">
-            <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-              <Col md={8} sm={24}>
-                <FormItem>
-                  <TextArea
-                    rows={3}
-                    placeholder="请输入备注信息"
-                    defaultValue={remark}
-                    onChange={e => this.setState({ remark: e.target.value })}
-                    style={{ width: 260 }}
-                  />
-                </FormItem>
-              </Col>
-            </Row>
-            <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-              <Col md={6} sm={24}>
-                <Button type="primary" size="small" onClick={() => this.editComplaint(com_id, 4)}>
-                  提交
-                </Button>
-              </Col>
-              <Col md={6} sm={24}>
-                <Button size="small" onClick={() => this.setState({ editRemarkComId: '' })}>
-                  取消
-                </Button>
-              </Col>
-            </Row>
-          </Form>
-        }
-      >
-        <Button
-          type="primary"
-          size="small"
-          ghost
-          onClick={() => this.setState({ editRemarkComId: com_id, remark })}
-        >
-          处理
-        </Button>
-      </Popover>
-    );
-  }
 
   // 导出
   handleDownload = () => {
@@ -420,11 +368,13 @@ class ReportLIst extends Component {
     } = this.props;
     const { list = [] } = listData || {};
 
-    const { modalVisible, infoModalVisible, peview, findID } = this.state;
+    const { modalVisible, infoModalVisible, peview, findID, isDispose } = this.state;
 
     const infoMethods = {
       handleInfoModal: this.handleInfoModal,
+      handleInfoModalOk: this.editComplaint,
       findID,
+      isDispose
     };
 
     return (

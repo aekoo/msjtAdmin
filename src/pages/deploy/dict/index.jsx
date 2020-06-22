@@ -51,7 +51,7 @@ class DictList extends Component {
             onConfirm={() => this.deleteFunc(record)}
             icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
           >
-            <a>删除</a>
+            <a>禁用</a>
           </Popconfirm>
         </span>
       ),

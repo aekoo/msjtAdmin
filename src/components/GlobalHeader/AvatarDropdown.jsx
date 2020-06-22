@@ -48,6 +48,10 @@ class AvatarDropdown extends React.Component {
         )}
         {menu && <Menu.Divider />}
 
+        <Menu.Item key="updatePwd">
+          <Icon type="logout" />
+          <FormattedMessage id="menu.account.updatePwd" defaultMessage="updatePwd" />
+        </Menu.Item>
         <Menu.Item key="logout">
           <Icon type="logout" />
           <FormattedMessage id="menu.account.logout" defaultMessage="logout" />
