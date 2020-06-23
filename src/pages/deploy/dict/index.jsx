@@ -1,4 +1,4 @@
-import { Row, Col, Button, Badge, Card, Divider, Form, Table, Icon, Input, Select, Popconfirm, message, } from 'antd';
+import { Row, Col, Button, Badge, Card, Divider, Form, Table, Icon, Input, Switch, Popconfirm, message, } from 'antd';
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
@@ -24,7 +24,7 @@ class DictList extends Component {
   };
   columns = [
     {
-      title: '类型ID',
+      title: '序号',
       dataIndex: 'data_id',
     },
     {
@@ -45,14 +45,15 @@ class DictList extends Component {
         <span>
           <a onClick={() => this.handleModalVisible(true, record)}>编辑</a>
           <Divider type="vertical" />
-          <Popconfirm
-            title="确定要删除？"
+          {/* <Popconfirm
+            title="确定要禁用？"
             okType="danger"
             onConfirm={() => this.deleteFunc(record)}
             icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
           >
             <a>禁用</a>
-          </Popconfirm>
+          </Popconfirm> */}
+          <Switch checked={record.valid_flag == 1} onChange={(e) => this.changeFunc(e, record)} />
         </span>
       ),
     },
@@ -83,6 +84,22 @@ class DictList extends Component {
       });
     }
     this.handleModalVisible();
+  };
+  // 开关
+  changeFunc = (checked, record) => {
+    const { dispatch } = this.props;
+    const { data_id } = record;
+    if (checked) {
+      dispatch({
+        type: 'deploy/enableDict',
+        payload: { data_id },
+      });
+    } else {
+      dispatch({
+        type: 'deploy/disableDict',
+        payload: { data_id },
+      });
+    }
   };
   // 删除
   deleteFunc = record => {

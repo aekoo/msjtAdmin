@@ -3,6 +3,8 @@ import {
   getDict,
   addDict,
   editDict,
+  enableDict,
+  disableDict,
   deleteDict,
 } from '@/services/deploy';
 
@@ -33,6 +35,20 @@ const DeployModel = {
     },
     *editDict({ payload }, { call, put }) {
       const response = yield call(editDict, payload);
+      if (response.code !== 200) return message.error(response.msg);
+      yield put({
+        type: 'fetchDict',
+      });
+    },
+    *enableDict({ payload }, { call, put }) {
+      const response = yield call(enableDict, payload);
+      if (response.code !== 200) return message.error(response.msg);
+      yield put({
+        type: 'fetchDict',
+      });
+    },
+    *disableDict({ payload }, { call, put }) {
+      const response = yield call(disableDict, payload);
       if (response.code !== 200) return message.error(response.msg);
       yield put({
         type: 'fetchDict',
