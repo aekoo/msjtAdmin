@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import { routerRedux } from 'dva/router';
 import { stringify } from 'querystring';
 import { fakeAccountLogin, getFakeCaptcha } from '@/services/login';
@@ -42,6 +43,8 @@ const Model = {
         }
 
         yield put(routerRedux.replace(redirect || '/'));
+      } else {
+        message.error(response.msg);
       }
     },
 

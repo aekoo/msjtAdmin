@@ -26,27 +26,21 @@ const DeployModel = {
     },
     *addDict({ payload }, { call, put }) {
       const response = yield call(addDict, payload);
-      if (response.code !== 200) {
-        return message.error(response.msg);
-      }
+      if (response.code !== 200) return message.error(response.msg);
       yield put({
         type: 'fetchDict',
       });
     },
     *editDict({ payload }, { call, put }) {
       const response = yield call(editDict, payload);
-      if (response.code !== 200) {
-        return message.error(response.msg);
-      }
+      if (response.code !== 200) return message.error(response.msg);
       yield put({
         type: 'fetchDict',
       });
     },
     *deleteDict({ payload }, { call, put }) {
       const response = yield call(deleteDict, payload);
-      if (response.code !== 200) {
-        return message.error(response.msg);
-      }
+      if (response.code !== 200) return message.error(response.msg);
       yield put({
         type: 'fetchDict',
       });

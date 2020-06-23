@@ -15,6 +15,7 @@ const OrderModel = {
   effects: {
     *fetch({ payload }, { call, put }) {
       const response = yield call(GetComplaint, payload);
+      if (response.code !== 200) return message.error(response.msg);
       yield put({
         type: 'saveList',
         payload: response,
@@ -22,6 +23,7 @@ const OrderModel = {
     },
     *fetchById({ payload }, { call, put }) {
       const response = yield call(GetComplaintByID, payload);
+      if (response.code !== 200) return message.error(response.msg);
       yield put({
         type: 'saveRow',
         payload: response,
@@ -29,6 +31,7 @@ const OrderModel = {
     },
     *fetchAllStatus({ payload }, { call, put }) {
       const response = yield call(GetDictionaryStatus, payload);
+      if (response.code !== 200) return message.error(response.msg);
       yield put({
         type: 'saveStatus',
         payload: response,
