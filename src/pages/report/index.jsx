@@ -10,6 +10,7 @@ import {
   Popover,
   Popconfirm,
   Table,
+  Tooltip,
   Select,
   Row,
   Modal,
@@ -125,17 +126,28 @@ class ReportLIst extends Component {
     {
       title: '操作',
       dataIndex: 'action',
-      width: 200,
+      width: 220,
       fixed: 'right',
       render: (text, record) => (
         <span>
-          <Button
-            type="primary"
-            size="small"
-            onClick={() => this.handleInfoModal(true, record.com_id)}
-          >
-            查看
-          </Button>
+          <Tooltip title="查看">
+            <Button
+              shape="circle"
+              icon="search"
+              onClick={() => this.handleInfoModal(true, record.com_id)}
+            />
+          </Tooltip>
+          <Divider type="vertical" />
+          <Tooltip title="删除">
+            <Popconfirm
+              title="确定要删除吗？"
+              okType="danger"
+              onConfirm={() => this.deleteComplaint(record.com_id)}
+              icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
+            >
+              <Button type="danger" icon="delete" />
+            </Popconfirm>
+          </Tooltip>
           {record.data_contents != '已归档' ? (
             <>
               <Divider type="vertical" />
@@ -151,16 +163,15 @@ class ReportLIst extends Component {
           {record.data_contents != '已归档' && record.data_contents != '新建' ? (
             <>
               <Divider type="vertical" />
-              <Popconfirm
-                title="确定要归档吗？"
-                okType="danger"
-                onConfirm={() => this.editComplaint(record.com_id, 5)}
-                icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
-              >
-                <Button type="danger" ghost size="small">
-                  归档
-                </Button>
-              </Popconfirm>
+
+              <Tooltip title="归档">
+                <Popconfirm
+                  title="确定要归档吗？"
+                  onConfirm={() => this.editComplaint(record.com_id, 5)}
+                >
+                  <Button type="primary" ghost icon="save" theme="twoTone" />
+                </Popconfirm>
+              </Tooltip>
             </>
           ) : null}
         </span>
@@ -232,6 +243,15 @@ class ReportLIst extends Component {
     dispatch({
       type: 'report/editComplaint',
       payload: { com_id, com_status, remark },
+    });
+    this.handleInfoModal();
+  };
+  // 删除
+  deleteComplaint = com_id => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'report/deleteComplaint',
+      payload: { com_id },
     });
     this.handleInfoModal();
   };

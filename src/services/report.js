@@ -25,6 +25,12 @@ export async function EditComplaint(params) {
     data: jsonToFormData(params),
   });
 }
+export async function DeleteComplaint(params) {
+  return request('/api/DeleteComplaint', {
+    method: 'POST',
+    data: jsonToFormData(params),
+  });
+}
 
 export async function exportData(params) {
   return request('/api/download', {

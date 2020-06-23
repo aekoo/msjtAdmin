@@ -1,5 +1,12 @@
 import { message } from 'antd';
-import { GetComplaint, GetComplaintByID, GetDictionaryStatus, EditComplaint, exportData } from '@/services/report';
+import {
+  GetComplaint,
+  GetComplaintByID,
+  GetDictionaryStatus,
+  EditComplaint,
+  DeleteComplaint,
+  exportData,
+} from '@/services/report';
 
 const OrderModel = {
   namespace: 'report',
@@ -41,7 +48,14 @@ const OrderModel = {
     *editComplaint({ payload }, { call, put }) {
       const response = yield call(EditComplaint, payload);
       if (response.code !== 200) return message.error(response.msg);
-      message.success('完成')
+      message.success('完成');
+      yield put({ type: 'fetch' });
+    },
+    // 删除
+    *deleteComplaint({ payload }, { call, put }) {
+      const response = yield call(DeleteComplaint, payload);
+      if (response.code !== 200) return message.error(response.msg);
+      message.success('删除成功');
       yield put({ type: 'fetch' });
     },
     // 导出
