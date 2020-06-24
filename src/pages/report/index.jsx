@@ -27,7 +27,7 @@ const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 const { TextArea } = Input;
-const dateFormat = 'YYYY/MM/DD';
+const dateFormat = 'YYYY-MM-DD HH:mm:ss';
 
 /* eslint react/no-multi-comp:0 */
 @connect(({ report, loading }) => ({
@@ -111,8 +111,8 @@ class ReportLIst extends Component {
             ))}
           </div>
         ) : (
-          '-'
-        );
+            '-'
+          );
       },
     },
     {
@@ -208,8 +208,8 @@ class ReportLIst extends Component {
       this.setState({ formValues: fieldsValue });
       let params = {
         ...fieldsValue,
-        start_time: rangeValue ? rangeValue[0].format('YYYY-MM-DD') : '',
-        end_time: rangeValue ? rangeValue[1].format('YYYY-MM-DD') : '',
+        start_time: rangeValue[0] ? rangeValue[0].format(dateFormat) : '',
+        end_time: rangeValue[1] ? rangeValue[1].format(dateFormat) : '',
       };
       // delete params.searchDate;
       this.fetchListData(params);
@@ -301,38 +301,43 @@ class ReportLIst extends Component {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={6} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem label="举报时间">
               {getFieldDecorator('searchDate', { initialValue: '' })(
-                <RangePicker format={dateFormat} />,
+                <RangePicker
+                  style={{ width: '100%' }}
+                  format={dateFormat}
+                  showTime={{
+                    hideDisabledOptions: true,
+                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
+                  }}
+                />,
               )}
             </FormItem>
           </Col>
-          <Col md={6} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem label="举报人">
               {getFieldDecorator('name', { initialValue: '' })(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
-          <Col md={6} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem label="联系电话">
               {getFieldDecorator('tel', { initialValue: '' })(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
-          <Col md={6} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem label="身份证号码">
               {getFieldDecorator('cardId', { initialValue: '' })(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
-        </Row>
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={6} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem label="举报类容">
               {getFieldDecorator('com_content', { initialValue: '' })(
                 <Input placeholder="请输入" />,
               )}
             </FormItem>
           </Col>
-          <Col md={6} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem label="状态">
               {getFieldDecorator('status', { initialValue: '' })(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
