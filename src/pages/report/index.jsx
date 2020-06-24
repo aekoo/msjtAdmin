@@ -126,7 +126,7 @@ class ReportLIst extends Component {
     {
       title: '操作',
       dataIndex: 'action',
-      width: 220,
+      width: 200,
       fixed: 'right',
       render: (text, record) => (
         <span>
@@ -137,18 +137,7 @@ class ReportLIst extends Component {
               onClick={() => this.handleInfoModal(true, record.com_id)}
             />
           </Tooltip>
-          <Divider type="vertical" />
-          <Tooltip title="删除">
-            <Popconfirm
-              title="确定要删除吗？"
-              okType="danger"
-              onConfirm={() => this.deleteComplaint(record.com_id)}
-              icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
-            >
-              <Button type="danger" icon="delete" />
-            </Popconfirm>
-          </Tooltip>
-          {record.data_contents != '已归档' ? (
+          {record.data_contents !== '已归档' ? (
             <>
               <Divider type="vertical" />
               <Button
@@ -160,7 +149,22 @@ class ReportLIst extends Component {
               </Button>
             </>
           ) : null}
-          {record.data_contents != '已归档' && record.data_contents != '新建' ? (
+          {record.data_contents === '新建' ? (
+            <>
+              <Divider type="vertical" />
+              <Tooltip title="删除">
+                <Popconfirm
+                  title="确定要删除吗？"
+                  okType="danger"
+                  onConfirm={() => this.deleteComplaint(record.com_id)}
+                  icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
+                >
+                  <Button type="danger" icon="delete" />
+                </Popconfirm>
+              </Tooltip>
+            </>
+          ) : null}
+          {record.data_contents !== '已归档' && record.data_contents !== '新建' ? (
             <>
               <Divider type="vertical" />
 
