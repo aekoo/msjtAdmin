@@ -32,10 +32,14 @@ export async function DeleteComplaint(params) {
   });
 }
 
+// export async function exportData(params) {
+//   return request('/api/download', {
+//     method: 'GET', // GET / POST 均可以
+//     data: params,
+//     responseType: 'blob', // 必须注明返回二进制流
+//   });
+// }
+
 export async function exportData(params) {
-  return request('/api/download', {
-    method: 'GET', // GET / POST 均可以
-    data: params,
-    responseType: 'blob', // 必须注明返回二进制流
-  });
+  return request('/api/download', { responseType: 'blob', params });
 }
