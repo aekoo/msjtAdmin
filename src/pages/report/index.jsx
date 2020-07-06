@@ -268,8 +268,8 @@ class ReportLIst extends Component {
     const rangeValue = formValues['searchDate'];
     let params = {
       ...formValues,
-      start_time: rangeValue ? rangeValue[0].format('YYYY-MM-DD') : '',
-      end_time: rangeValue ? rangeValue[1].format('YYYY-MM-DD') : '',
+      start_time: rangeValue ? rangeValue[0].format(dateFormat) : '',
+      end_time: rangeValue ? rangeValue[1].format(dateFormat) : '',
     };
     var now = moment()
       .locale('zh-cn')
